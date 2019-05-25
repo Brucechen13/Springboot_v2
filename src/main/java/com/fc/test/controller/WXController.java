@@ -1,5 +1,7 @@
 package com.fc.test.controller;
 
+import com.fc.common.AppUtil;
+import com.fc.common.HttpRequest;
 import com.fc.test.common.base.BaseController;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -9,6 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("wx")
@@ -26,10 +31,12 @@ public class WXController extends BaseController {
             JsonObject item = new JsonObject();
             item.addProperty("userpic", "");
             item.addProperty("userName", "cc");
+            item.addProperty("userSign", "签名");
             item.addProperty("title", "cc");
             item.addProperty("content", "cc");
             item.addProperty("status", "cc");
-            item.addProperty("time", "2019-5-23");
+            item.addProperty("beginTime", "2019-5-23");
+            item.addProperty("endTime", "2019-5-23");
             JsonArray flags = new JsonArray();
             for(int ii = 0; ii < 3; ii ++){
                 flags.add("flag" + ii);
@@ -53,6 +60,38 @@ public class WXController extends BaseController {
         result.addProperty("method", "@ResponseBody");
 
         return result.toString();
+    }
+
+    @RequestMapping("/toLogin")
+    @ResponseBody
+    public String doLogin(HttpServletResponse resp, HttpServletRequest req){
+        resp.setHeader("Access-Control-Allow-Origin", "*");
+        resp.setContentType("text/html;charset=UTF-8");
+        String code = req.getParameter("code");
+        String nickName = req.getParameter("name");
+        String avatarUrl = req.getParameter("url");
+
+        System.out.println("code:" + code + " nickName:" + nickName + " url:" + avatarUrl);
+
+        String url = AppUtil.wxLoginUrl;
+        String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
+
+        int error = 0;
+        JsonObject obj = new JsonObject();
+        try {
+            String ret = HttpRequest.sendGet("https://api.weixin.qq.com/sns/jscode2session", param);
+            System.out.println(ret);
+            obj = new JsonParser().parse(ret).getAsJsonObject();
+            String openid = obj.getString("openid");
+            String session_key = obj.getString("session_key");
+            obj.addProperty("status", 0);
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            error = -1;
+            obj.addProperty("status", 1);
+        }
+        return obj.toString();
     }
 
     @RequestMapping("/login")
