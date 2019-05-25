@@ -1,10 +1,9 @@
-package com.fc.test.controller;
+package com.fc.wx.controller;
 
-import com.fc.common.AesCbcUtil;
-import com.fc.common.AppUtil;
-import com.fc.common.HttpRequest;
+import com.fc.wx.common.AesCbcUtil;
+import com.fc.wx.common.AppUtil;
+import com.fc.wx.common.HttpRequest;
 import com.fc.test.common.base.BaseController;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

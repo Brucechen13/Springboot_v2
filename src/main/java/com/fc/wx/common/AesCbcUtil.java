@@ -1,4 +1,4 @@
-package com.fc.common;
+package com.fc.wx.common;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 

@@ -1,4 +1,4 @@
-package com.fc.common;
+package com.fc.wx.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;

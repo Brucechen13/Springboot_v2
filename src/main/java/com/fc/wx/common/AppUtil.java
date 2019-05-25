@@ -1,4 +1,4 @@
-package com.fc.common;
+package com.fc.wx.common;
 
 public class AppUtil {
     public static final String appId = "wx4d615de5a4f663cc";
