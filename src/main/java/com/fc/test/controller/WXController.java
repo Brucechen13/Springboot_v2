@@ -1,5 +1,6 @@
 package com.fc.test.controller;
 
+import com.fc.common.AesCbcUtil;
 import com.fc.common.AppUtil;
 import com.fc.common.HttpRequest;
 import com.fc.test.common.base.BaseController;
@@ -79,11 +80,11 @@ public class WXController extends BaseController {
         int error = 0;
         JsonObject obj = new JsonObject();
         try {
-            String ret = HttpRequest.sendGet("https://api.weixin.qq.com/sns/jscode2session", param);
+            String ret = HttpRequest.sendGet(url, param);
             System.out.println(ret);
             obj = new JsonParser().parse(ret).getAsJsonObject();
-            String openid = obj.getString("openid");
-            String session_key = obj.getString("session_key");
+            String openid = obj.get("openid").toString();
+            String session_key = obj.get("session_key").toString();
             obj.addProperty("status", 0);
         } catch (Exception e) {
             // TODO: handle exception
@@ -107,17 +108,18 @@ public class WXController extends BaseController {
         String openid=json.get("openid").toString(); //用户唯一标识
         try{
             int a;
-//            //拿到用户session_key和用户敏感数据进行解密，拿到用户信息。
-//            String decrypts=AesCbcUtil.decrypt(encryptedData,sessionkey,iv,"utf-8");//解密
-//            JsonObject jsons = JsonObject.fromObject(decrypts);
-//            String nickName=jsons.get("nickName").toString(); //用户昵称
-//            String jsonsds=jsons.get("avatarUrl").toString(); //用户头像
-//            jsons.get("avatarUrl").toString(); //头像
-//            jsons.get("gender").toString();//性别
-//            jsons.get("unionid").toString(); //unionid
-//            jsons.get("city").toString(); //城市
-//            jsons.get("province").toString();//省份
-//            jsons.get("country").toString(); //国家
+            //拿到用户session_key和用户敏感数据进行解密，拿到用户信息。
+            String decrypts= AesCbcUtil.decrypt(encryptedData,sessionkey,iv,"utf-8");//解密
+            JsonObject jsons = new JsonParser().parse(decrypts).getAsJsonObject();
+            String nickName=jsons.get("nickName").toString(); //用户昵称
+            String jsonsds=jsons.get("avatarUrl").toString(); //用户头像
+            jsons.get("avatarUrl").toString(); //头像
+            jsons.get("gender").toString();//性别
+            jsons.get("unionid").toString(); //unionid
+            jsons.get("city").toString(); //城市
+            jsons.get("province").toString();//省份
+            jsons.get("country").toString(); //国家
+            return jsons.toString();
         }catch (Exception e) {
             e.printStackTrace();
         }
