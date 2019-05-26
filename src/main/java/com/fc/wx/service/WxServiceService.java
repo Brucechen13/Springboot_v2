@@ -41,10 +41,10 @@ public class WxServiceService {
         return wxPostMapper.insert(record);
     }
 
-    public PageInfo<WxUser> list(Tablepar tablepar){
+    public PageInfo<WxPost> listPosts(Tablepar tablepar){
         PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
-        List<WxUser> list = wxUserMapper.selectList();
-        PageInfo<WxUser> pageInfo = new PageInfo<>(list);
+        List<WxPost> list = wxPostMapper.selectList();
+        PageInfo<WxPost> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
 }

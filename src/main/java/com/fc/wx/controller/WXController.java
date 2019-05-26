@@ -85,8 +85,8 @@ public class WXController extends BaseController {
     @RequestMapping("/list")
     @ResponseBody
     public Object list(Tablepar tablepar){
-        PageInfo<WxUser> page=wxServiceService.list(tablepar) ;
-        TableSplitResult<WxUser> result=new TableSplitResult<WxUser>(page.getPageNum(), (long)page.getPages(), page.getList());
+        PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
+        TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
         return  ResponseBean.MakeSuccessRes("Post List", result);
     }
 
@@ -97,20 +97,22 @@ public class WXController extends BaseController {
         System.out.println(jsonParam.toString());
         WxPost post = new WxPost();
         post.setUserid(userId);
-        post.setTitle(jsonParam.get("title").toString());
-        post.setContent(jsonParam.get("content").toString());
+        post.setTitle(jsonParam.get("titleIntro").toString());
+        post.setContent(jsonParam.get("taskDiscribe").toString());
         try {
-            post.setBegintime(sdf.parse(jsonParam.get("beginTime").toString()));
-            post.setBegintime(sdf.parse(jsonParam.get("beginTime").toString()));
+            post.setBegintime(sdf.parse(jsonParam.get("startime").toString()));
+            post.setBegintime(sdf.parse(jsonParam.get("endtime").toString()));
+            //class
         }catch (ParseException e){
             return ResponseBean.MakeFailRes("时间格式出错： " + jsonParam.toString());
         }
-        if(jsonParam.getAsJsonArray("flags").size() == 0){
+        JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
+        if(flags.size() == 0){
             post.setFlags(null);
         }else {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < jsonParam.getAsJsonArray("flags").size(); i ++) {
-                sb.append(jsonParam.getAsJsonArray("flags").get(i).toString() + SEP);
+            for (int i = 0; i < flags.size(); i ++) {
+                sb.append(flags.get(i).toString() + SEP);
             }
             post.setFlags(sb.toString());
         }

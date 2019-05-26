@@ -18,6 +18,6 @@ public interface WxPostMapper {
 
     int updateByPrimaryKey(WxPost record);
 
-    @Select("select * from wx_posts")
+    @Select("select * from wx_posts, wx_users where wx_posts.userid = wx_users.id")
     public List<WxPost> selectList();
 }
