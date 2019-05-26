@@ -136,7 +136,7 @@ public class WXController extends BaseController {
             String openid = res.get("openid").toString();
             String sessionkey = res.get("session_key").toString();
 
-            user = wxServiceService.loginByWeixin(code); //根据code去调用接口获取用户openid和session_key
+            user = wxServiceService.loginByWeixin(openid); //根据code去调用接口获取用户openid和session_key
             if (user == null) {
                 user = new WxUser();
                 user.setOpenid(openid);
