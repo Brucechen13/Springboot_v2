@@ -126,6 +126,7 @@ public class WXController extends BaseController {
         String url = AppUtil.wxLoginUrl;
         String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
         WxUser user = null;
+        String msg = "之前已登录";
         try {
             String ret = HttpRequest.sendGet(url, param);
             System.out.println(ret);
@@ -142,7 +143,7 @@ public class WXController extends BaseController {
                 user.setAvatarurl(avatarUrl);
                 user.setSign("该用户尚未设置签名");
                 user.setLasttime(new Date());
-                user.setId("" + wxServiceService.insertUser(user));
+                msg = "首次登录";
             }
         } catch (Exception e) {
             // TODO: handle exception
@@ -151,6 +152,6 @@ public class WXController extends BaseController {
         }
         Cookie cookie = new Cookie("sessionId", user.getId());
         response.addCookie(cookie);
-        return ResponseBean.MakeSuccessRes("登录成功", null);
+        return ResponseBean.MakeSuccessRes("登录成功", msg);
     }
 }
