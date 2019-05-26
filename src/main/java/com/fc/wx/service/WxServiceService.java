@@ -25,7 +25,7 @@ public class WxServiceService {
     private WxPostMapper wxPostMapper;
 
     public WxUser loginByWeixin(String code){
-        return null;
+        return wxUserMapper.selectByOpenId(code);
     }
 
 

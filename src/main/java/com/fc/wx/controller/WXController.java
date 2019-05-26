@@ -39,7 +39,7 @@ public class WXController extends BaseController {
     @ApiOperation(value="测试",notes="测试")
     @ResponseBody
     @RequestMapping("/test")
-    public String index(HttpServletResponse response, String code, String nickName, String avatarUrl) {
+    public String index(HttpServletResponse response) {
         // 将获取的json数据封装一层，然后在给返回
         JsonObject result = new JsonObject();
         result.addProperty("status", "0");
@@ -62,7 +62,6 @@ public class WXController extends BaseController {
             array.add(item);
         }
         result.add("data", array);
-        result.addProperty("test", avatarUrl);
 
 
         Cookie cookie=new Cookie("id", "123");
@@ -123,24 +122,19 @@ public class WXController extends BaseController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public ResponseBean loginByWeixin(HttpServletResponse response, String code, String data, String iv)
-    {
+    public ResponseBean loginByWeixin(HttpServletResponse response, String code, String nickName, String avatarUrl) {
+        String url = AppUtil.wxLoginUrl;
+        String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
+        WxUser user = null;
+        try {
+            String ret = HttpRequest.sendGet(url, param);
+            System.out.println(ret);
+            JsonObject res = new JsonParser().parse(ret).getAsJsonObject();
+            String openid = res.get("openid").toString();
+            String sessionkey = res.get("session_key").toString();
 
-         WxUser user = wxServiceService.loginByWeixin(code); //根据code去调用接口获取用户openid和session_key
-        if(user == null){
-            String url = AppUtil.wxLoginUrl;
-            String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
-            try {
-                String ret = HttpRequest.sendGet(url, param);
-                System.out.println(ret);
-                JsonObject res = new JsonParser().parse(ret).getAsJsonObject();
-                String openid = res.get("openid").toString();
-                String sessionkey = res.get("session_key").toString();
-                String decrypts= AesCbcUtil.decrypt(data,sessionkey,iv,"utf-8");//解密
-                JsonObject jsons = new JsonParser().parse(decrypts).getAsJsonObject();
-                String nickName=jsons.get("nickName").toString(); //用户昵称
-                String avatarUrl=jsons.get("avatarUrl").toString(); //用户头像
-
+            user = wxServiceService.loginByWeixin(code); //根据code去调用接口获取用户openid和session_key
+            if (user == null) {
                 user = new WxUser();
                 user.setOpenid(openid);
                 user.setSessionkey(sessionkey);
@@ -148,14 +142,14 @@ public class WXController extends BaseController {
                 user.setAvatarurl(avatarUrl);
                 user.setSign("该用户尚未设置签名");
                 user.setLasttime(new Date());
-                user.setId(""+wxServiceService.insertUser(user));
-            } catch (Exception e) {
-                // TODO: handle exception
-                e.printStackTrace();
-                return ResponseBean.MakeFailRes(e.getLocalizedMessage());
+                user.setId("" + wxServiceService.insertUser(user));
             }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return ResponseBean.MakeFailRes(e.getLocalizedMessage());
         }
-        Cookie cookie=new Cookie("sessionId",user.getId());
+        Cookie cookie = new Cookie("sessionId", user.getId());
         response.addCookie(cookie);
         return ResponseBean.MakeSuccessRes("登录成功", null);
     }
