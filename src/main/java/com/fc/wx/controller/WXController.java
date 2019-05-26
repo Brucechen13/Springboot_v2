@@ -91,7 +91,7 @@ public class WXController extends BaseController {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/add", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseBean writeByBody(@CookieValue("sessionId") String userId, @RequestBody JsonObject jsonParam) {
         // 直接将json信息打印出来
         System.out.println(jsonParam.toString());
