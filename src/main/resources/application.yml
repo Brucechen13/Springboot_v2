@@ -38,6 +38,11 @@ spring :
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
 mybatis :
   mapperLocations : classpath*:mybatis/*/*.xml
   executor-type : reuse

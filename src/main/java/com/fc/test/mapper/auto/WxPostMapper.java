@@ -1,6 +1,9 @@
 package com.fc.test.mapper.auto;
 
 import com.fc.test.model.auto.WxPost;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 public interface WxPostMapper {
     int deleteByPrimaryKey(String id);
@@ -14,4 +17,7 @@ public interface WxPostMapper {
     int updateByPrimaryKeySelective(WxPost record);
 
     int updateByPrimaryKey(WxPost record);
+
+    @Select("select * from wx_posts")
+    public List<WxPost> selectList();
 }

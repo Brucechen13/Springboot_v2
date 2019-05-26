@@ -1,30 +1,45 @@
 package com.fc.wx.controller;
 
+import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
+import com.fc.test.model.custom.TableSplitResult;
+import com.fc.test.model.custom.Tablepar;
+import com.fc.wx.bean.ResponseBean;
 import com.fc.wx.common.AesCbcUtil;
 import com.fc.wx.common.AppUtil;
 import com.fc.wx.common.HttpRequest;
 import com.fc.test.common.base.BaseController;
+import com.github.pagehelper.PageInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("wx")
 @Api(value = "微信接口")
 public class WXController extends BaseController {
+
+    String SEP = "&%$";
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     @ApiOperation(value="测试",notes="测试")
     @ResponseBody
     @RequestMapping("/test")
-    public String index() {
+    public String index(HttpServletResponse response, String code, String nickName, String avatarUrl) {
         // 将获取的json数据封装一层，然后在给返回
         JsonObject result = new JsonObject();
         result.addProperty("status", "0");
@@ -47,40 +62,71 @@ public class WXController extends BaseController {
             array.add(item);
         }
         result.add("data", array);
+        result.addProperty("test", avatarUrl);
 
-        WxUser user = new WxUser();
-        user.setOpenid("0001");
-        user.setSessionkey("0001");
-        user.setNickname("0001");
-        user.setAvatarurl("0001");
-        user.setSign("0001");
-        user.setLasttime(new Date());
-        wxServiceService.insert(user);
+
+        Cookie cookie=new Cookie("id", "123");
+        response.addCookie(cookie);
 
         return result.toString();
     }
 
+    @GetMapping("/article")
     @ResponseBody
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String writeByBody(@RequestBody JsonObject jsonParam) {
+    public ResponseBean article() {
+        List<WxUser> users = new ArrayList<>();
+        for(int i = 0; i < 10; i ++){
+            WxUser user = new WxUser();
+            user.setNickname("asd");
+            users.add(user);
+        }
+        return ResponseBean.MakeSuccessRes("You are already logged in", users);
+    }
+
+    @RequestMapping("/list")
+    @ResponseBody
+    public Object list(Tablepar tablepar){
+        PageInfo<WxUser> page=wxServiceService.list(tablepar) ;
+        TableSplitResult<WxUser> result=new TableSplitResult<WxUser>(page.getPageNum(), (long)page.getPages(), page.getList());
+        return  ResponseBean.MakeSuccessRes("Post List", result);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/add", method = RequestMethod.GET, produces = "application/json;charset=UTF-8")
+    public ResponseBean writeByBody(@CookieValue("sessionId") String userId, @RequestBody JsonObject jsonParam) {
         // 直接将json信息打印出来
         System.out.println(jsonParam.toString());
+        WxPost post = new WxPost();
+        post.setUserid(userId);
+        post.setTitle(jsonParam.get("title").toString());
+        post.setContent(jsonParam.get("content").toString());
+        try {
+            post.setBegintime(sdf.parse(jsonParam.get("beginTime").toString()));
+            post.setBegintime(sdf.parse(jsonParam.get("beginTime").toString()));
+        }catch (ParseException e){
+            return ResponseBean.MakeFailRes("时间格式出错： " + jsonParam.toString());
+        }
+        if(jsonParam.getAsJsonArray("flags").size() == 0){
+            post.setFlags(null);
+        }else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < jsonParam.getAsJsonArray("flags").size(); i ++) {
+                sb.append(jsonParam.getAsJsonArray("flags").get(i).toString() + SEP);
+            }
+            post.setFlags(sb.toString());
+        }
+        post.setStatus("进行中");
+        wxServiceService.insertPost(post);
 
-        // 将获取的json数据封装一层，然后在给返回
-        JsonObject result = new JsonObject();
-        result.addProperty("msg", "ok");
-        result.addProperty("method", "@ResponseBody");
-
-        return result.toString();
+        return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
 
     @RequestMapping("/login")
     @ResponseBody
-    public String loginByWeixin(String code, String encryptedData, String iv)
+    public ResponseBean loginByWeixin(HttpServletResponse response, String code, String data, String iv)
     {
 
          WxUser user = wxServiceService.loginByWeixin(code); //根据code去调用接口获取用户openid和session_key
-        JsonObject obj = new JsonObject();
         if(user == null){
             String url = AppUtil.wxLoginUrl;
             String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
@@ -90,20 +136,27 @@ public class WXController extends BaseController {
                 JsonObject res = new JsonParser().parse(ret).getAsJsonObject();
                 String openid = res.get("openid").toString();
                 String sessionkey = res.get("session_key").toString();
-                String decrypts= AesCbcUtil.decrypt(encryptedData,sessionkey,iv,"utf-8");//解密
+                String decrypts= AesCbcUtil.decrypt(data,sessionkey,iv,"utf-8");//解密
                 JsonObject jsons = new JsonParser().parse(decrypts).getAsJsonObject();
                 String nickName=jsons.get("nickName").toString(); //用户昵称
-                String jsonsds=jsons.get("avatarUrl").toString(); //用户头像
-                obj.addProperty("status", 0);
-                obj.add("data", jsons);
+                String avatarUrl=jsons.get("avatarUrl").toString(); //用户头像
+
+                user = new WxUser();
+                user.setOpenid(openid);
+                user.setSessionkey(sessionkey);
+                user.setNickname(nickName);
+                user.setAvatarurl(avatarUrl);
+                user.setSign("该用户尚未设置签名");
+                user.setLasttime(new Date());
+                user.setId(""+wxServiceService.insertUser(user));
             } catch (Exception e) {
                 // TODO: handle exception
                 e.printStackTrace();
-                obj.addProperty("status", 1);
+                return ResponseBean.MakeFailRes(e.getLocalizedMessage());
             }
-        }else{
-            obj.addProperty("status", 0);
         }
-        return obj.toString();
+        Cookie cookie=new Cookie("sessionId",user.getId());
+        response.addCookie(cookie);
+        return ResponseBean.MakeSuccessRes("登录成功", null);
     }
 }
