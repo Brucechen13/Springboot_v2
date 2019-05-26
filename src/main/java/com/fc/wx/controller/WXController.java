@@ -143,6 +143,7 @@ public class WXController extends BaseController {
                 user.setAvatarurl(avatarUrl);
                 user.setSign("该用户尚未设置签名");
                 user.setLasttime(new Date());
+                wxServiceService.insertUser(user);
                 msg = "首次登录";
             }
         } catch (Exception e) {
