@@ -33,11 +33,11 @@
   </delete>
   <insert id="insert" parameterType="com.fc.test.model.auto.WxPost">
     insert into wx_posts (id, userid, title, 
-      content, status, flags, 
+      content, status, flagstr,
       class, begintime, endtime
       )
     values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
-      #{content,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flags,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flagstr,jdbcType=VARCHAR}, 
       #{class,jdbcType=VARCHAR}, #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}
       )
   </insert>
@@ -59,8 +59,8 @@
       <if test="status != null">
         status,
       </if>
-      <if test="flags != null">
-        flags,
+      <if test="flagstr != null">
+        flagstr,
       </if>
       <if test="class != null">
         class,
@@ -88,8 +88,8 @@
       <if test="status != null">
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="flags != null">
-        #{flags,jdbcType=VARCHAR},
+      <if test="flagstr != null">
+        #{flagstr,jdbcType=VARCHAR},
       </if>
       <if test="class != null">
         #{class,jdbcType=VARCHAR},
@@ -117,8 +117,8 @@
       <if test="status != null">
         status = #{status,jdbcType=VARCHAR},
       </if>
-      <if test="flags != null">
-        flags = #{flags,jdbcType=VARCHAR},
+      <if test="flagstr != null">
+        flagstr = #{flagstr,jdbcType=VARCHAR},
       </if>
       <if test="class != null">
         class = #{class,jdbcType=VARCHAR},
@@ -138,7 +138,7 @@
       title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
-      flags = #{flags,jdbcType=VARCHAR},
+      flagstr = #{flagstr,jdbcType=VARCHAR},
       class = #{class,jdbcType=VARCHAR},
       begintime = #{begintime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP}
