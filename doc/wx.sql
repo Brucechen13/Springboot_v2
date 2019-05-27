@@ -16,7 +16,7 @@ CREATE TABLE `wx_users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信用户表';
 
-INSERT INTO `wx_users` VALUES ('577272523196989440', '3', '3', 'user00', 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJcs0O4Ssia44FMeW34y8j4Mse52PhwB2Rjbg5KOBN1ClEF3AWTMv6Zgv3YUkzGgCB92QMsqRQ6ialQ/132', 'this is sign', '2019-06-01 22:00:00');
+INSERT INTO `wx_users` VALUES ('577272523196989440', '3', '3', 'user00', 'https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJcs0O4Ssia44FMeW34y8j4Mse52PhwB2Rjbg5KOBN1ClEF3AWTMv6Zgv3YUkzGgCB92QMsqRQ6ialQ/132', 'this is sign', '2019-06-01');
 -- ----------------------------
 -- Table structure for 动态
 -- ----------------------------
@@ -36,8 +36,8 @@ CREATE TABLE `wx_posts` (
 
 ALTER TABLE wx_posts ADD CONSTRAINT fk_wx_posts_id FOREIGN KEY (userid) REFERENCES wx_users(id);
 
-INSERT INTO `wx_posts` VALUES ('1241415', '577272523196989440', 'this is title', 'this is content', 'test0', 'test0', 'test0', '2019-06-01 22:00:00', '2019-06-01 22:00:00');
-INSERT INTO `wx_posts` VALUES ('1241416', '577272523196989440', '4', '4', 'test0', 'test0', 'test0', '2019-06-01 22:00:00', '2019-06-01 22:00:00');
+INSERT INTO `wx_posts` VALUES ('1241415', '577272523196989440', 'this is title', 'this is content', 'test0', 'test0', 'test0', '2019-06-01', '2019-06-01');
+INSERT INTO `wx_posts` VALUES ('1241416', '577272523196989440', '4', '4', 'test0', 'test0', 'test0', '2019-06-01', '2019-06-01');
 
 -- ----------------------------
 -- Table structure for 评论
@@ -56,4 +56,4 @@ CREATE TABLE `wx_comments` (
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id1 FOREIGN KEY (userid) REFERENCES wx_users(id);
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id2 FOREIGN KEY (postid) REFERENCES wx_posts(id);
 
-INSERT INTO `wx_comments` VALUES ('1245', '577272523196989440', '1241416', '4', '4', '2019-06-01 22:00:00');
+INSERT INTO `wx_comments` VALUES ('1245', '577272523196989440', '1241416', '4', '4', '2019-06-01');
