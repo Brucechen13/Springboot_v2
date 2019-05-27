@@ -23,7 +23,6 @@ public class WxPost implements Serializable {
     private Date endtime;
 
     private WxUser user;
-    
 
     private static final long serialVersionUID = 1L;
 
