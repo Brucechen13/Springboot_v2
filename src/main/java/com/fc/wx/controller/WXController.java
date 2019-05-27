@@ -94,7 +94,7 @@ public class WXController extends BaseController {
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseBean writeByBody(@CookieValue("sessionId") String userId, @RequestBody String json) {
         // 直接将json信息打印出来
-        System.out.println(json);
+        System.out.println(json + " " + userId);
         JsonObject jsonParam = new JsonParser().parse(json).getAsJsonObject();
         WxPost post = new WxPost();
         post.setUserid(userId);
@@ -102,10 +102,11 @@ public class WXController extends BaseController {
         post.setContent(jsonParam.get("taskDiscribe").toString());
         try {
             post.setBegintime(sdf.parse(jsonParam.get("startime").toString()));
-            post.setBegintime(sdf.parse(jsonParam.get("endtime").toString()));
+            post.setEndtime(sdf.parse(jsonParam.get("endtime").toString()));
             //class
         }catch (ParseException e){
-            return ResponseBean.MakeFailRes("时间格式出错： " + jsonParam.toString());
+            post.setBegintime(new Date());
+            post.setEndtime(new Date());
         }
         JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
         if(flags.size() == 0){
