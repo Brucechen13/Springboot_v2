@@ -16,7 +16,7 @@ CREATE TABLE `wx_users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信用户表';
 
-
+INSERT INTO `wx_users` VALUES ('577272523196989440', '3', '3', 'test0', 'test0', 'test0', '2019-06-01 22:00:00');
 -- ----------------------------
 -- Table structure for 动态
 -- ----------------------------
@@ -28,13 +28,16 @@ CREATE TABLE `wx_posts` (
   `content` varchar(255) DEFAULT NULL COMMENT '内容',
   `status` varchar(255) DEFAULT NULL COMMENT '状态',
   `flags` varchar(255) DEFAULT NULL COMMENT '标签',
-  `class` varchar(255) DEFAULT NULL COMMENT '类别',
+  `classes` varchar(255) DEFAULT NULL COMMENT '类别',
   `begintime` datetime DEFAULT NULL COMMENT '开始时间',
   `endtime` datetime DEFAULT NULL COMMENT '结束时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='发布动态表';
 
 ALTER TABLE wx_posts ADD CONSTRAINT fk_wx_posts_id FOREIGN KEY (userid) REFERENCES wx_users(id);
+
+INSERT INTO `wx_posts` VALUES ('1241415', '577272523196989440', '3', '3', 'test0', 'test0', 'test0', '2019-06-01 22:00:00', '2019-06-01 22:00:00');
+INSERT INTO `wx_posts` VALUES ('1241416', '577272523196989440', '4', '4', 'test0', 'test0', 'test0', '2019-06-01 22:00:00', '2019-06-01 22:00:00');
 
 -- ----------------------------
 -- Table structure for 评论
@@ -52,3 +55,5 @@ CREATE TABLE `wx_comments` (
 
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id1 FOREIGN KEY (userid) REFERENCES wx_users(id);
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id2 FOREIGN KEY (postid) REFERENCES wx_posts(id);
+
+INSERT INTO `wx_comments` VALUES ('1245''577272523196989440', '1241416', , '4', '4', '2019-06-01 22:00:00');
