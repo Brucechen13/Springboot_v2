@@ -4,6 +4,7 @@ import com.fc.test.common.base.BaseService;
 import com.fc.test.mapper.auto.WxCommentMapper;
 import com.fc.test.mapper.auto.WxPostMapper;
 import com.fc.test.mapper.auto.WxUserMapper;
+import com.fc.test.model.auto.WxComment;
 import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
 import com.fc.test.model.custom.Tablepar;
@@ -44,6 +45,12 @@ public class WxServiceService {
         //添加雪花主键id
         record.setId(SnowflakeIdWorker.getUUID());
         return wxPostMapper.insert(record);
+    }
+
+    public int insertComment(WxComment record) {
+        //添加雪花主键id
+        record.setId(SnowflakeIdWorker.getUUID());
+        return wxCommentMapper.insert(record);
     }
 
     public PageInfo<WxPost> listPosts(Tablepar tablepar){

@@ -1,5 +1,6 @@
 package com.fc.test.controller;
 
+import com.fc.test.model.auto.WxComment;
 import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
 import com.fc.test.model.custom.TableSplitResult;
@@ -45,10 +46,10 @@ public class WXController extends BaseController {
         return  ResponseBean.MakeSuccessRes("Post List", result);
     }
 
-    @ApiOperation(value="添加新动态",notes="{'titleIntro':xx, 'taskDiscribe':xx, 'startime':xx, 'endtime':xx, 'selectedTag':[]}")
+    @ApiOperation(value="添加新动态",notes="{'titleIntro':xx, 'taskDiscribe':xx, 'startime':xx, 'endtime':xx, 'selectedTag':[], 'class':xx}")
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseBean writeByBody(@CookieValue("sessionId") String userId, @RequestBody String json) {
+    public ResponseBean addPost(@CookieValue("sessionId") String userId, @RequestBody String json) {
         // 直接将json信息打印出来
         System.out.println(json + " " + userId);
         JsonObject jsonParam = new JsonParser().parse(json).getAsJsonObject();
@@ -56,6 +57,7 @@ public class WXController extends BaseController {
         post.setUserid(userId);
         post.setTitle(jsonParam.get("titleIntro").toString());
         post.setContent(jsonParam.get("taskDiscribe").toString());
+        post.setClasses(jsonParam.get("class").toString());
         if(jsonParam.get("startime") == null ||
                 jsonParam.get("startime").toString().equals("")){
             post.setBegintime(jsonParam.get("startime").toString());
@@ -79,6 +81,21 @@ public class WXController extends BaseController {
         wxServiceService.insertPost(post);
 
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
+    }
+
+    @ApiOperation(value="添加动态评论",notes="添加动态评论")
+    @ResponseBody
+    @RequestMapping(value = "/comment", method = RequestMethod.POST)
+    public ResponseBean addComment(@CookieValue("sessionId") String userId, String postid, String content) {
+
+        WxComment comment = new WxComment();
+        comment.setContent(content);
+        comment.setPostid(postid);
+        comment.setUserid(userId);
+        comment.setPosttime(sdf.format(new Date()));
+        wxServiceService.insertComment(comment);
+
+        return ResponseBean.MakeSuccessRes("添加评论成功", null);
     }
 
     @ApiOperation(value="用户登录",notes="用户登录")
