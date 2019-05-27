@@ -27,7 +27,7 @@ CREATE TABLE `wx_posts` (
   `title` varchar(255) DEFAULT NULL COMMENT '标题',
   `content` varchar(255) DEFAULT NULL COMMENT '内容',
   `status` varchar(255) DEFAULT NULL COMMENT '状态',
-  `flags` varchar(255) DEFAULT NULL COMMENT '标签',
+  `flagstr` varchar(255) DEFAULT NULL COMMENT '标签',
   `classes` varchar(255) DEFAULT NULL COMMENT '类别',
   `begintime` varchar(255) DEFAULT NULL COMMENT '开始时间',
   `endtime` varchar(255) DEFAULT NULL COMMENT '结束时间',

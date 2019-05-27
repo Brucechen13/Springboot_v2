@@ -20,6 +20,11 @@
     from wx_comments p, wx_users u
     where id = #{id,jdbcType=VARCHAR} and u.id = p.userid
   </select>
+  <select id="selectByPostId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from wx_comments p, wx_users u
+    where postid = #{postid,jdbcType=VARCHAR} and u.id = p.userid
+  </select>
   <select id="selectList" resultMap="BaseResultMap">
     select *
     from wx_comments p, wx_users u where u.id = p.userid

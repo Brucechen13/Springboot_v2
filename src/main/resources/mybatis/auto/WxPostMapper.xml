@@ -7,7 +7,7 @@
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="flags" jdbcType="VARCHAR" property="flags" />
+    <result column="flagstr" jdbcType="VARCHAR" property="flagstr" />
     <result column="class" jdbcType="VARCHAR" property="class" />
     <result column="begintime" jdbcType="TIMESTAMP" property="begintime" />
     <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />

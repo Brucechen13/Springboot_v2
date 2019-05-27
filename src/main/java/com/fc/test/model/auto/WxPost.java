@@ -2,6 +2,7 @@ package com.fc.test.model.auto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class WxPost implements Serializable {
     private String id;
@@ -14,7 +15,11 @@ public class WxPost implements Serializable {
 
     private String status;
 
-    private String flags;
+    private String flagstr;
+
+    private List<String> flags;
+
+    private List<WxComment> comments;
 
     private String classes;
 
@@ -66,12 +71,28 @@ public class WxPost implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public String getFlags() {
+    public String getFlagstr() {
+        return flagstr;
+    }
+
+    public void setFlagstr(String flagstr) {
+        this.flagstr = flagstr;
+    }
+
+    public List<String> getFlags() {
         return flags;
     }
 
-    public void setFlags(String flags) {
-        this.flags = flags == null ? null : flags.trim();
+    public void setFlags(List<String> flags) {
+        this.flags = flags;
+    }
+
+    public List<WxComment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<WxComment> comments) {
+        this.comments = comments;
     }
 
     public String getClasses() {

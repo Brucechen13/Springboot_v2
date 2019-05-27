@@ -1,4 +1,4 @@
-package com.fc.wx.controller;
+package com.fc.test.controller;
 
 import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
@@ -33,56 +33,11 @@ import java.util.List;
 @Api(value = "微信接口")
 public class WXController extends BaseController {
 
-    String SEP = "&%$";
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    @ApiOperation(value="测试",notes="测试")
-    @ResponseBody
-    @RequestMapping("/test")
-    public String index(HttpServletResponse response) {
-        // 将获取的json数据封装一层，然后在给返回
-        JsonObject result = new JsonObject();
-        result.addProperty("status", "0");
-        JsonArray array = new JsonArray();
-        for(int i = 0; i < 20; i ++){
-            JsonObject item = new JsonObject();
-            item.addProperty("userpic", "");
-            item.addProperty("userName", "cc");
-            item.addProperty("userSign", "签名");
-            item.addProperty("title", "cc");
-            item.addProperty("content", "cc");
-            item.addProperty("status", "cc");
-            item.addProperty("beginTime", "2019-5-23");
-            item.addProperty("endTime", "2019-5-23");
-            JsonArray flags = new JsonArray();
-            for(int ii = 0; ii < 3; ii ++){
-                flags.add("flag" + ii);
-            }
-            item.add("flag", flags);
-            array.add(item);
-        }
-        result.add("data", array);
 
-
-        Cookie cookie=new Cookie("id", "123");
-        response.addCookie(cookie);
-
-        return result.toString();
-    }
-
-    @GetMapping("/article")
-    @ResponseBody
-    public ResponseBean article() {
-        List<WxUser> users = new ArrayList<>();
-        for(int i = 0; i < 10; i ++){
-            WxUser user = new WxUser();
-            user.setNickname("asd");
-            users.add(user);
-        }
-        return ResponseBean.MakeSuccessRes("You are already logged in", users);
-    }
-
-    @RequestMapping("/list")
+    @ApiOperation(value="查看所有动态",notes="查看所有动态")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Object list(Tablepar tablepar){
         PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
@@ -90,6 +45,7 @@ public class WXController extends BaseController {
         return  ResponseBean.MakeSuccessRes("Post List", result);
     }
 
+    @ApiOperation(value="添加新动态",notes="{'titleIntro':xx, 'taskDiscribe':xx, 'startime':xx, 'endtime':xx, 'selectedTag':[]}")
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseBean writeByBody(@CookieValue("sessionId") String userId, @RequestBody String json) {
@@ -100,13 +56,14 @@ public class WXController extends BaseController {
         post.setUserid(userId);
         post.setTitle(jsonParam.get("titleIntro").toString());
         post.setContent(jsonParam.get("taskDiscribe").toString());
-        try {
-            post.setBegintime(sdf.parse(jsonParam.get("startime").toString()));
-            post.setEndtime(sdf.parse(jsonParam.get("endtime").toString()));
+        if(jsonParam.get("startime") == null ||
+                jsonParam.get("startime").toString().equals("")){
+            post.setBegintime(jsonParam.get("startime").toString());
+            post.setEndtime(jsonParam.get("endtime").toString().toLowerCase());
             //class
-        }catch (ParseException e){
-            post.setBegintime(new Date());
-            post.setEndtime(new Date());
+        }else{
+            post.setBegintime(sdf.format(new Date()));
+            post.setEndtime(sdf.format(new Date()));
         }
         JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
         if(flags.size() == 0){
@@ -114,9 +71,9 @@ public class WXController extends BaseController {
         }else {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < flags.size(); i ++) {
-                sb.append(flags.get(i).toString() + SEP);
+                sb.append(flags.get(i).toString() + AppUtil.SEP);
             }
-            post.setFlags(sb.toString());
+            post.setFlagstr(sb.toString());
         }
         post.setStatus("进行中");
         wxServiceService.insertPost(post);
@@ -124,7 +81,8 @@ public class WXController extends BaseController {
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
 
-    @RequestMapping("/login")
+    @ApiOperation(value="用户登录",notes="用户登录")
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
     public ResponseBean loginByWeixin(HttpServletResponse response, String code, String nickName, String avatarUrl) {
         String url = AppUtil.wxLoginUrl;
@@ -146,7 +104,7 @@ public class WXController extends BaseController {
                 user.setNickname(nickName);
                 user.setAvatarurl(avatarUrl);
                 user.setSign("该用户尚未设置签名");
-                user.setLasttime(new Date());
+                user.setLasttime(sdf.format(new Date()));
                 wxServiceService.insertUser(user);
                 msg = "首次登录";
             }
