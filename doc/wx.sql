@@ -56,4 +56,4 @@ CREATE TABLE `wx_comments` (
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id1 FOREIGN KEY (userid) REFERENCES wx_users(id);
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id2 FOREIGN KEY (postid) REFERENCES wx_posts(id);
 
-INSERT INTO `wx_comments` VALUES ('1245''577272523196989440', '1241416', , '4', '4', '2019-06-01 22:00:00');
+INSERT INTO `wx_comments` VALUES ('1245', '577272523196989440', '1241416', '4', '4', '2019-06-01 22:00:00');
