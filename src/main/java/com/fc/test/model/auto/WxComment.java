@@ -14,7 +14,7 @@ public class WxComment implements Serializable {
 
     private String status;
 
-    private Date posttime;
+    private String posttime;
 
     private WxUser user;
 
@@ -62,11 +62,11 @@ public class WxComment implements Serializable {
         this.status = status == null ? null : status.trim();
     }
 
-    public Date getPosttime() {
+    public String getPosttime() {
         return posttime;
     }
 
-    public void setPosttime(Date posttime) {
+    public void setPosttime(String posttime) {
         this.posttime = posttime;
     }
 

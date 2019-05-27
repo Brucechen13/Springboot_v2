@@ -16,7 +16,7 @@ public class WxUser implements Serializable {
 
     private String sign;
 
-    private Date lasttime;
+    private String lasttime;
 
     private static final long serialVersionUID = 1L;
 
@@ -68,11 +68,11 @@ public class WxUser implements Serializable {
         this.sign = sign == null ? null : sign.trim();
     }
 
-    public Date getLasttime() {
+    public String getLasttime() {
         return lasttime;
     }
 
-    public void setLasttime(Date lasttime) {
+    public void setLasttime(String lasttime) {
         this.lasttime = lasttime;
     }
 }
