@@ -69,7 +69,7 @@ public class WXController extends BaseController {
         }
         JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
         if(flags.size() == 0){
-            post.setFlags(null);
+            post.setFlagstr("");
         }else {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < flags.size(); i ++) {
