@@ -8,7 +8,7 @@
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="status" jdbcType="VARCHAR" property="status" />
     <result column="flagstr" jdbcType="VARCHAR" property="flagstr" />
-    <result column="class" jdbcType="VARCHAR" property="class" />
+    <result column="classes" jdbcType="VARCHAR" property="classes" />
     <result column="begintime" jdbcType="TIMESTAMP" property="begintime" />
     <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
       <association property="user" javaType="com.fc.test.model.auto.WxUser">
@@ -34,11 +34,11 @@
   <insert id="insert" parameterType="com.fc.test.model.auto.WxPost">
     insert into wx_posts (id, userid, title, 
       content, status, flagstr,
-      class, begintime, endtime
+      classes, begintime, endtime
       )
     values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
       #{content,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{flagstr,jdbcType=VARCHAR}, 
-      #{class,jdbcType=VARCHAR}, #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}
+      #{classes,jdbcType=VARCHAR}, #{begintime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.fc.test.model.auto.WxPost">
@@ -62,8 +62,8 @@
       <if test="flagstr != null">
         flagstr,
       </if>
-      <if test="class != null">
-        class,
+      <if test="classes != null">
+        classes,
       </if>
       <if test="begintime != null">
         begintime,
@@ -91,8 +91,8 @@
       <if test="flagstr != null">
         #{flagstr,jdbcType=VARCHAR},
       </if>
-      <if test="class != null">
-        #{class,jdbcType=VARCHAR},
+      <if test="classes != null">
+        #{classes,jdbcType=VARCHAR},
       </if>
       <if test="begintime != null">
         #{begintime,jdbcType=TIMESTAMP},
@@ -120,8 +120,8 @@
       <if test="flagstr != null">
         flagstr = #{flagstr,jdbcType=VARCHAR},
       </if>
-      <if test="class != null">
-        class = #{class,jdbcType=VARCHAR},
+      <if test="classes != null">
+        classes = #{classes,jdbcType=VARCHAR},
       </if>
       <if test="begintime != null">
         begintime = #{begintime,jdbcType=TIMESTAMP},
@@ -139,7 +139,7 @@
       content = #{content,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
       flagstr = #{flagstr,jdbcType=VARCHAR},
-      class = #{class,jdbcType=VARCHAR},
+      classes = #{classes,jdbcType=VARCHAR},
       begintime = #{begintime,jdbcType=TIMESTAMP},
       endtime = #{endtime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
