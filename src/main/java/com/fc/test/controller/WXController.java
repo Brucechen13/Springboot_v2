@@ -83,7 +83,7 @@ public class WXController extends BaseController {
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
 
-    @ApiOperation(value="添加动态评论",notes="添加动态评论")
+    @ApiOperation(value="添加动态评论",notes="添加动态评论", produces = "application/json;charset=UTF-8")
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public ResponseBean addComment(@CookieValue("sessionId") String userId, String postid, String content) {
