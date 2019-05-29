@@ -46,6 +46,14 @@ public class WXController extends BaseController {
         return  ResponseBean.MakeSuccessRes("Post List", result);
     }
 
+    @ApiOperation(value="查看动态",notes="查看动态")
+    @RequestMapping(value = "/detail", method = RequestMethod.GET)
+    @ResponseBody
+    public Object getDetail(String postid){
+        WxPost page=wxServiceService.listPosts(tablepar);
+        return  ResponseBean.MakeSuccessRes("Post Detail", page);
+    }
+
     @ApiOperation(value="添加新动态",notes="{'titleIntro':xx, 'taskDiscribe':xx, 'startime':xx, 'endtime':xx, 'selectedTag':[], 'class':xx}")
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -83,9 +91,9 @@ public class WXController extends BaseController {
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
 
-    @ApiOperation(value="添加动态评论",notes="添加动态评论", produces = "application/json;charset=UTF-8")
+    @ApiOperation(value="添加动态评论",notes="添加动态评论")
     @ResponseBody
-    @RequestMapping(value = "/comment", method = RequestMethod.POST)
+    @RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public ResponseBean addComment(@CookieValue("sessionId") String userId, String postid, String content) {
 
         WxComment comment = new WxComment();
