@@ -92,10 +92,11 @@ public class WXController extends BaseController {
         comment.setContent(content);
         comment.setPostid(postid);
         comment.setUserid(userId);
+        comment.setStatus("");
         comment.setPosttime(sdf.format(new Date()));
         wxServiceService.insertComment(comment);
 
-        return ResponseBean.MakeSuccessRes("添加评论成功", null);
+        return ResponseBean.MakeSuccessRes("添加评论成功", content);
     }
 
     @ApiOperation(value="用户登录",notes="用户登录")
