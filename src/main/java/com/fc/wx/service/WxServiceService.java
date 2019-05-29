@@ -67,4 +67,12 @@ public class WxServiceService {
         PageInfo<WxPost> pageInfo = new PageInfo<>(list);
         return pageInfo;
     }
+
+    public WxPost getPost(String id){
+        WxPost post = wxPostMapper.selectByPrimaryKey(id);
+        if(post != null){
+            post.setComments(wxCommentMapper.selectByPostId(post.getId()));
+        }
+        return post;
+    }
 }

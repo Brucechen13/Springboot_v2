@@ -50,7 +50,7 @@ public class WXController extends BaseController {
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     @ResponseBody
     public Object getDetail(String postid){
-        WxPost page=wxServiceService.listPosts(tablepar);
+        WxPost page=wxServiceService.getPost(postid);
         return  ResponseBean.MakeSuccessRes("Post Detail", page);
     }
 
