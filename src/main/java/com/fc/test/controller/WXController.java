@@ -161,11 +161,20 @@ public class WXController extends BaseController {
         return ResponseBean.MakeSuccessRes("添加评论成功", content);
     }
 
+    @ApiOperation(value="查看动态是否被收藏",notes="查看动态是否被收藏")
+    @RequestMapping(value = "/iscollect", method = RequestMethod.GET)
+    @ResponseBody
+    public Object isCollect(@SessionAttribute("userid") String userid, String postid){
+        System.out.println("isCollect, sessId: " + userid + " " + postid);
+        boolean page = wxServiceService.isCollect(userid, postid);
+        return  ResponseBean.MakeSuccessRes("Post Detail", page);
+    }
+
     @ApiOperation(value="添加动态收藏",notes="添加动态收藏")
     @ResponseBody
     @RequestMapping(value = "/collect", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseBean addCollect(HttpServletRequest request, @SessionAttribute("userid") String userId, String postid) {
-        System.out.println("comment, sessId: " + userId);
+    public ResponseBean addCollect(@SessionAttribute("userid") String userId, String postid) {
+        System.out.println("collect, sessId: " + userId + " " + postid);
         WxCollect collect = new WxCollect();
         collect.setPostid(postid);
         collect.setUserid(userId);
@@ -173,6 +182,16 @@ public class WXController extends BaseController {
         wxServiceService.insertCollect(collect);
 
         return ResponseBean.MakeSuccessRes("收藏动态成功", null);
+    }
+
+    @ApiOperation(value="取消动态收藏",notes="取消动态收藏")
+    @ResponseBody
+    @RequestMapping(value = "/uncollect", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseBean unCollect(@SessionAttribute("userid") String userId, String postid) {
+        System.out.println("comment, sessId: " + userId);
+        wxServiceService.deleteCollect(userId, postid);
+
+        return ResponseBean.MakeSuccessRes("取消收藏成功", null);
     }
 
     @ApiOperation(value="用户登录",notes="用户登录")

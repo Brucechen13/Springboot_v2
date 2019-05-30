@@ -11,14 +11,24 @@
     id, userid, postid, collecttime
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from wx_collects
     where id = #{id,jdbcType=VARCHAR}
   </select>
+  <select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  select
+  <include refid="Base_Column_List" />
+  from wx_collects
+  where userid = #{userid,jdbcType=VARCHAR} and postid = #{postid,jdbcType=VARCHAR}
+</select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from wx_collects
     where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByUserId" parameterType="java.lang.String">
+    delete from wx_collects
+    where userid = #{userid,jdbcType=VARCHAR} and postid = #{postid,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.fc.test.model.auto.WxCollect">
     insert into wx_collects (id, userid, postid, 

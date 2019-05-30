@@ -68,6 +68,10 @@ public class WxServiceService {
         return wxCollectMapper.insert(record);
     }
 
+    public int deleteCollect(String useid, String postid) {
+        return wxCollectMapper.deleteByUserId(useid, postid);
+    }
+
     private void deal(WxPost post){
         List<String> flags = new ArrayList<>();
         for(String flag : post.getFlagstr().split(AppUtil.SEP)){
@@ -127,5 +131,9 @@ public class WxServiceService {
             post.setComments(wxCommentMapper.selectByPostId(post.getId()));
         }
         return post;
+    }
+
+    public boolean isCollect(String userId, String postId){
+        return wxCollectMapper.selectByUserId(userId, postId) != null;
     }
 }
