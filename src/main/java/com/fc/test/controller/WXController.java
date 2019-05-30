@@ -26,9 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("wx")
@@ -47,16 +45,49 @@ public class WXController extends BaseController {
     }
 
     @ApiOperation(value="测试Cookie",notes="测试Cookie")
-    @RequestMapping(value = "/test1", method = RequestMethod.GET)
+    @RequestMapping(value = "/test1", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     @ResponseBody
-    public Object test1(@CookieValue("sessionId") String userId) {
+    public Object test1(HttpServletRequest request, @CookieValue("sessionId") String userId) {
+        String retrunValue = "Hello, Angus! This is GET request!";
+        System.out.println("=======GET Process=======");
+
+        Map<String,String[]> requestMsg = request.getParameterMap();
+        Enumeration<String> requestHeader = request.getHeaderNames();
+
+        System.out.println("------- header -------");
+        while(requestHeader.hasMoreElements()){
+            String headerKey=requestHeader.nextElement().toString();
+            //打印所有Header值
+
+            System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
+        }
+        return ResponseBean.MakeSuccessRes("登录成功", userId);
+    }
+
+    @ApiOperation(value="测试Cookie",notes="测试Cookie")
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test2(HttpServletRequest request, @CookieValue("sessionId") String userId) {
+        String retrunValue = "Hello, Angus! This is GET request!";
+        System.out.println("=======GET Process=======");
+
+        Map<String,String[]> requestMsg = request.getParameterMap();
+        Enumeration<String> requestHeader = request.getHeaderNames();
+
+        System.out.println("------- header -------");
+        while(requestHeader.hasMoreElements()){
+            String headerKey=requestHeader.nextElement().toString();
+            //打印所有Header值
+
+            System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
+        }
         return ResponseBean.MakeSuccessRes("登录成功", userId);
     }
 
     @ApiOperation(value="写入session",notes="写入session")
-    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    @RequestMapping(value = "/test21", method = RequestMethod.GET)
     @ResponseBody
-    public Object test2(HttpSession session) {
+    public Object test21(HttpSession session) {
         session.setAttribute("sessionId2","123");
         return ResponseBean.MakeSuccessRes("写入session", null);
     }
@@ -125,8 +156,22 @@ public class WXController extends BaseController {
     @ApiOperation(value="添加动态评论",notes="添加动态评论")
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseBean addComment(@CookieValue("sessionId") String userId, String postid, String content) {
+    public ResponseBean addComment(HttpServletRequest request, @CookieValue("sessionId") String userId, String postid, String content) {
+        String retrunValue = "Hello, Angus! This is GET request!";
+        System.out.println("=======GET Process=======");
 
+        Map<String,String[]> requestMsg = request.getParameterMap();
+        Enumeration<String> requestHeader = request.getHeaderNames();
+
+        System.out.println("------- header -------");
+        while(requestHeader.hasMoreElements()){
+            String headerKey=requestHeader.nextElement().toString();
+            //打印所有Header值
+
+            System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
+        }
+
+        System.out.println("sessId: " + userId);
         WxComment comment = new WxComment();
         comment.setContent(content);
         comment.setPostid(postid);
