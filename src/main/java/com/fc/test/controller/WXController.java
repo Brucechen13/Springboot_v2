@@ -63,7 +63,6 @@ public class WXController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public Object list(HttpServletRequest request, Tablepar tablepar){
-        printHeader(request);
         PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
         return  ResponseBean.MakeSuccessRes("Post List", result);
