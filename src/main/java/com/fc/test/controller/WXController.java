@@ -6,6 +6,7 @@ import com.fc.test.model.auto.WxUser;
 import com.fc.test.model.custom.TableSplitResult;
 import com.fc.test.model.custom.Tablepar;
 import com.fc.wx.bean.ResponseBean;
+import com.fc.wx.bean.WxPostFrontBean;
 import com.fc.wx.common.AesCbcUtil;
 import com.fc.wx.common.AppUtil;
 import com.fc.wx.common.HttpRequest;
@@ -35,21 +36,7 @@ public class WXController extends BaseController {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    @ApiOperation(value="写入Cookie",notes="写入Cookie")
-    @RequestMapping(value = "/test", method = RequestMethod.GET)
-    @ResponseBody
-    public Object test(HttpServletResponse response) {
-        Cookie cookie = new Cookie("sessionId","123");
-        response.addCookie(cookie);
-        return ResponseBean.MakeSuccessRes("写入cookie", null);
-    }
-
-    @ApiOperation(value="测试Cookie",notes="测试Cookie")
-    @RequestMapping(value = "/test1", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    @ResponseBody
-    public Object test1(HttpServletRequest request, @CookieValue("sessionId") String userId) {
-        String retrunValue = "Hello, Angus! This is GET request!";
-        System.out.println("=======GET Process=======");
+    private void printHeader(HttpServletRequest request){
 
         Map<String,String[]> requestMsg = request.getParameterMap();
         Enumeration<String> requestHeader = request.getHeaderNames();
@@ -61,42 +48,6 @@ public class WXController extends BaseController {
 
             System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
         }
-        return ResponseBean.MakeSuccessRes("登录成功", userId);
-    }
-
-    @ApiOperation(value="测试Cookie",notes="测试Cookie")
-    @RequestMapping(value = "/test2", method = RequestMethod.GET)
-    @ResponseBody
-    public Object test2(HttpServletRequest request, @CookieValue("sessionId") String userId) {
-        String retrunValue = "Hello, Angus! This is GET request!";
-        System.out.println("=======GET Process=======");
-
-        Map<String,String[]> requestMsg = request.getParameterMap();
-        Enumeration<String> requestHeader = request.getHeaderNames();
-
-        System.out.println("------- header -------");
-        while(requestHeader.hasMoreElements()){
-            String headerKey=requestHeader.nextElement().toString();
-            //打印所有Header值
-
-            System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
-        }
-        return ResponseBean.MakeSuccessRes("登录成功", userId);
-    }
-
-    @ApiOperation(value="写入session",notes="写入session")
-    @RequestMapping(value = "/test21", method = RequestMethod.GET)
-    @ResponseBody
-    public Object test21(HttpSession session) {
-        session.setAttribute("sessionId2","123");
-        return ResponseBean.MakeSuccessRes("写入session", null);
-    }
-
-    @ApiOperation(value="测试session",notes="测试session")
-    @RequestMapping(value = "/test3", method = RequestMethod.GET)
-    @ResponseBody
-    public Object test3(@SessionAttribute("sessionId2") String userId) {
-        return ResponseBean.MakeSuccessRes("登录成功", userId);
     }
 
     @ApiOperation(value="查看所有动态",notes="查看所有动态")
@@ -119,36 +70,37 @@ public class WXController extends BaseController {
     @ApiOperation(value="添加新动态",notes="{'titleIntro':xx, 'taskDiscribe':xx, 'startime':xx, 'endtime':xx, 'selectedTag':[], 'class':xx}")
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseBean addPost(@CookieValue("sessionId") String userId, @RequestBody String json) {
+    public ResponseBean addPost(@SessionAttribute("userid") String userId, @RequestBody WxPostFrontBean bean) {
         // 直接将json信息打印出来
-        System.out.println(json + " " + userId);
-        JsonObject jsonParam = new JsonParser().parse(json).getAsJsonObject();
+        System.out.println("add post: " + bean.getTitleIntro() + " " + userId);
+//        JsonObject jsonParam = new JsonParser().parse(json).getAsJsonObject();
         WxPost post = new WxPost();
         post.setUserid(userId);
-        post.setTitle(jsonParam.get("titleIntro").toString());
-        post.setContent(jsonParam.get("taskDiscribe").toString());
-        post.setClasses(jsonParam.get("class").toString());
-        if(jsonParam.get("startime") == null ||
-                jsonParam.get("startime").toString().equals("")){
-            post.setBegintime(jsonParam.get("startime").toString());
-            post.setEndtime(jsonParam.get("endtime").toString().toLowerCase());
-            //class
-        }else{
-            post.setBegintime(sdf.format(new Date()));
-            post.setEndtime(sdf.format(new Date()));
-        }
-        JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
-        if(flags.size() == 0){
-            post.setFlagstr("");
-        }else {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < flags.size(); i ++) {
-                sb.append(flags.get(i).toString() + AppUtil.SEP);
-            }
-            post.setFlagstr(sb.toString());
-        }
-        post.setStatus("进行中");
-        wxServiceService.insertPost(post);
+//        post.setTitle(jsonParam.get("titleIntro").toString());
+//        post.setContent(jsonParam.get("taskDiscribe").toString());
+//        post.setClasses(jsonParam.get("class").toString());
+//        if(jsonParam.get("startime") == null ||
+//                jsonParam.get("startime").toString().equals("")){
+//            post.setBegintime(jsonParam.get("startime").toString());
+//            post.setEndtime(jsonParam.get("endtime").toString().toLowerCase());
+//            //class
+//        }else{
+//            post.setBegintime(sdf.format(new Date()));
+//            post.setEndtime(sdf.format(new Date()));
+//        }
+//        JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
+//        if(flags.size() == 0){
+//            post.setFlagstr("");
+//        }else {
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < flags.size(); i ++) {
+//                sb.append(flags.get(i).toString() + AppUtil.SEP);
+//            }
+//            post.setFlagstr(sb.toString());
+//        }
+
+        post.setStatus(AppUtil.ACTIVATE);
+//        wxServiceService.insertPost(post);
 
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
@@ -156,22 +108,10 @@ public class WXController extends BaseController {
     @ApiOperation(value="添加动态评论",notes="添加动态评论")
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public ResponseBean addComment(HttpServletRequest request, @CookieValue("sessionId") String userId, String postid, String content) {
-        String retrunValue = "Hello, Angus! This is GET request!";
-        System.out.println("=======GET Process=======");
+    public ResponseBean addComment(HttpServletRequest request, @SessionAttribute("userid") String userId, String postid, String content) {
 
-        Map<String,String[]> requestMsg = request.getParameterMap();
-        Enumeration<String> requestHeader = request.getHeaderNames();
-
-        System.out.println("------- header -------");
-        while(requestHeader.hasMoreElements()){
-            String headerKey=requestHeader.nextElement().toString();
-            //打印所有Header值
-
-            System.out.println("headerKey="+headerKey+";value="+request.getHeader(headerKey));
-        }
-
-        System.out.println("sessId: " + userId);
+        printHeader(request);
+        System.out.println("comment, sessId: " + userId);
         WxComment comment = new WxComment();
         comment.setContent(content);
         comment.setPostid(postid);
@@ -186,7 +126,7 @@ public class WXController extends BaseController {
     @ApiOperation(value="用户登录",notes="用户登录")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseBean loginByWeixin(HttpServletResponse response, String code, String nickName, String avatarUrl) {
+    public ResponseBean loginByWeixin(HttpSession session, String code, String nickName, String avatarUrl) {
         String url = AppUtil.wxLoginUrl;
         String param = "appid=" + AppUtil.appId + "&secret=" + AppUtil.secret + "&js_code=" + code + "&grant_type=authorization_code";
         WxUser user = null;
@@ -215,8 +155,7 @@ public class WXController extends BaseController {
             e.printStackTrace();
             return ResponseBean.MakeFailRes(e.getLocalizedMessage());
         }
-        Cookie cookie = new Cookie("sessionId", user.getId());
-        response.addCookie(cookie);
+        session.setAttribute("userid", user.getId());
         return ResponseBean.MakeSuccessRes("登录成功", msg);
     }
 }

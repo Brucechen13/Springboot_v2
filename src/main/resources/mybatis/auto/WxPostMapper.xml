@@ -12,7 +12,7 @@
     <result column="begintime" jdbcType="TIMESTAMP" property="begintime" />
     <result column="endtime" jdbcType="TIMESTAMP" property="endtime" />
       <association property="user" javaType="com.fc.test.model.auto.WxUser">
-          <id property="id" column="id"/>
+          <!--<id property="id" column="id"/>-->
           <result column="nickname" jdbcType="VARCHAR" property="nickname" />
           <result column="avatarUrl" jdbcType="VARCHAR" property="avatarurl" />
           <result column="sign" jdbcType="VARCHAR" property="sign" />

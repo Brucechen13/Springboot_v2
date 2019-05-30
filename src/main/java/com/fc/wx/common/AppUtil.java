@@ -6,4 +6,7 @@ public class AppUtil {
     public static final String wxLoginUrl = "https://api.weixin.qq.com/sns/jscode2session";
 
     public static final String SEP = "#";
+
+    public static final String ACTIVATE = "进行中";
+    public static final String ENDED = "已结束";
 }

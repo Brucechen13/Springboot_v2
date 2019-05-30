@@ -15,7 +15,9 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -29,6 +31,8 @@ public class WxServiceService {
 
     @Autowired
     private WxCommentMapper wxCommentMapper;
+
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public WxUser loginByWeixin(String code){
         return wxUserMapper.selectByOpenId(code);
@@ -62,6 +66,9 @@ public class WxServiceService {
                 flags.add(flag);
             }
             post.setFlags(flags);
+            if(post.getEndtime().compareTo(sdf.format(new Date())) < 0){
+                post.setStatus(AppUtil.ENDED);
+            }
             post.setComments(wxCommentMapper.selectByPostId(post.getId()));
         }
         PageInfo<WxPost> pageInfo = new PageInfo<>(list);
