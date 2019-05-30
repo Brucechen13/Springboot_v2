@@ -50,10 +50,19 @@ public class WXController extends BaseController {
         }
     }
 
+    @ApiOperation(value="测试header",notes="测试header")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test(HttpServletRequest request){
+        printHeader(request);
+        return  ResponseBean.MakeSuccessRes("test header", null);
+    }
+
     @ApiOperation(value="查看所有动态",notes="查看所有动态")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public Object list(Tablepar tablepar){
+    public Object list(HttpServletRequest request, Tablepar tablepar){
+        printHeader(request);
         PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
         return  ResponseBean.MakeSuccessRes("Post List", result);
@@ -76,31 +85,24 @@ public class WXController extends BaseController {
 //        JsonObject jsonParam = new JsonParser().parse(json).getAsJsonObject();
         WxPost post = new WxPost();
         post.setUserid(userId);
-//        post.setTitle(jsonParam.get("titleIntro").toString());
-//        post.setContent(jsonParam.get("taskDiscribe").toString());
-//        post.setClasses(jsonParam.get("class").toString());
-//        if(jsonParam.get("startime") == null ||
-//                jsonParam.get("startime").toString().equals("")){
-//            post.setBegintime(jsonParam.get("startime").toString());
-//            post.setEndtime(jsonParam.get("endtime").toString().toLowerCase());
-//            //class
-//        }else{
-//            post.setBegintime(sdf.format(new Date()));
-//            post.setEndtime(sdf.format(new Date()));
-//        }
-//        JsonArray flags = jsonParam.getAsJsonArray("selectedTag");
-//        if(flags.size() == 0){
-//            post.setFlagstr("");
-//        }else {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < flags.size(); i ++) {
-//                sb.append(flags.get(i).toString() + AppUtil.SEP);
-//            }
-//            post.setFlagstr(sb.toString());
-//        }
+        post.setTitle(bean.getTitleIntro());
+        post.setContent(bean.getTaskDiscribe());
+        post.setClasses(bean.getClasses());
+        post.setBegintime(bean.getStartime());
+        post.setEndtime(bean.getEndtime());
+
+        if(bean.getSelectedTag() == null || bean.getSelectedTag().size() == 0){
+            post.setFlagstr("");
+        }else {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < bean.getSelectedTag().size(); i ++) {
+                sb.append(bean.getSelectedTag().get(i).toString() + AppUtil.SEP);
+            }
+            post.setFlagstr(sb.toString());
+        }
 
         post.setStatus(AppUtil.ACTIVATE);
-//        wxServiceService.insertPost(post);
+        wxServiceService.insertPost(post);
 
         return ResponseBean.MakeSuccessRes("添加动态成功", null);
     }
