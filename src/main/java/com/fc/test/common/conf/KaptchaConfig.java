@@ -1,7 +1,10 @@
 package com.fc.test.common.conf;
 
+import java.util.Arrays;
 import java.util.Properties;
 
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
@@ -58,4 +61,12 @@ public class KaptchaConfig {
 	        defaultKaptcha.setConfig(config);
 	        return defaultKaptcha;
 	    }
+    @Bean
+    public ConfigurableServletWebServerFactory configurableServletWebServerFactory() {
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        factory.addContextCustomizers(context -> {
+            context.setUseHttpOnly(false);
+        });
+        return factory;
+    }
 }

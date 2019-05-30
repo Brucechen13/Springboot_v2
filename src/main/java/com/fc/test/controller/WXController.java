@@ -53,8 +53,9 @@ public class WXController extends BaseController {
     @ApiOperation(value="测试header",notes="测试header")
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     @ResponseBody
-    public Object test(HttpServletRequest request){
+    public Object test(HttpSession session, HttpServletRequest request){
         printHeader(request);
+        session.setAttribute("userid", "123");
         return  ResponseBean.MakeSuccessRes("test header", null);
     }
 
