@@ -21,7 +21,7 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select *
     from wx_posts p, wx_users u
-    where id = #{id,jdbcType=VARCHAR} and u.id = p.userid
+    where p.id = #{id,jdbcType=VARCHAR} and u.id = p.userid
   </select>
     <select id="selectList" resultMap="BaseResultMap">
     select *
