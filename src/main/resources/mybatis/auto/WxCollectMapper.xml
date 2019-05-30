@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fc.test.mapper.auto.WxCollectMapper">
+  <resultMap id="BaseResultMap" type="com.fc.test.model.auto.WxCollect">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="postid" jdbcType="VARCHAR" property="postid" />
+    <result column="collecttime" jdbcType="VARCHAR" property="collecttime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, postid, collecttime
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from wx_collects
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from wx_collects
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.fc.test.model.auto.WxCollect">
+    insert into wx_collects (id, userid, postid, 
+      collecttime)
+    values (#{id,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{postid,jdbcType=VARCHAR}, 
+      #{collecttime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.fc.test.model.auto.WxCollect">
+    insert into wx_collects
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userid != null">
+        userid,
+      </if>
+      <if test="postid != null">
+        postid,
+      </if>
+      <if test="collecttime != null">
+        collecttime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="postid != null">
+        #{postid,jdbcType=VARCHAR},
+      </if>
+      <if test="collecttime != null">
+        #{collecttime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fc.test.model.auto.WxCollect">
+    update wx_collects
+    <set>
+      <if test="userid != null">
+        userid = #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="postid != null">
+        postid = #{postid,jdbcType=VARCHAR},
+      </if>
+      <if test="collecttime != null">
+        collecttime = #{collecttime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fc.test.model.auto.WxCollect">
+    update wx_collects
+    set userid = #{userid,jdbcType=VARCHAR},
+      postid = #{postid,jdbcType=VARCHAR},
+      collecttime = #{collecttime,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
