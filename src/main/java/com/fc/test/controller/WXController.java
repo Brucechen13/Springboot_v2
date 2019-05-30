@@ -74,16 +74,16 @@ public class WXController extends BaseController {
     public Object listOwner(@SessionAttribute("userid") String userId, Tablepar tablepar){
         PageInfo<WxPost> page=wxServiceService.listOwnList(userId, tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
-        return  ResponseBean.MakeSuccessRes("Post List", result);
+        return  ResponseBean.MakeSuccessRes("listowner", result);
     }
 
     @ApiOperation(value="查看收藏的动态",notes="查看收藏的动态")
     @RequestMapping(value = "/listcollect", method = RequestMethod.GET)
     @ResponseBody
     public Object listCollector(@SessionAttribute("userid") String userId, Tablepar tablepar){
-        PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
+        PageInfo<WxPost> page=wxServiceService.listCollectList(userId, tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
-        return  ResponseBean.MakeSuccessRes("Post List", result);
+        return  ResponseBean.MakeSuccessRes("listcollect", result);
     }
 
     @ApiOperation(value="查看评论的动态",notes="查看评论的动态")
@@ -92,7 +92,7 @@ public class WXController extends BaseController {
     public Object listComment(@SessionAttribute("userid") String userId, Tablepar tablepar){
         PageInfo<WxPost> page=wxServiceService.listCommentList(userId, tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
-        return  ResponseBean.MakeSuccessRes("Post List", result);
+        return  ResponseBean.MakeSuccessRes("listcomment", result);
     }
 
     @ApiOperation(value="查看动态",notes="查看动态")

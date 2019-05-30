@@ -95,3 +95,6 @@ CREATE TABLE `wx_collects` (
   `collecttime` varchar(255) DEFAULT NULL COMMENT '时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='动态收藏表';
+
+
+INSERT INTO `wx_collects` VALUES ('1249', '577272523196989440', '1241417', '2019-06-01');

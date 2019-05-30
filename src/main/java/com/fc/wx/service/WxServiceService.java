@@ -100,6 +100,16 @@ public class WxServiceService {
         return pageInfo;
     }
 
+    public PageInfo<WxPost> listCollectList(String userId, Tablepar tablepar){
+        PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
+        List<WxPost> list = wxPostMapper.selectCollectList(userId);
+        for(WxPost post : list){
+            deal(post);
+        }
+        PageInfo<WxPost> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
     public WxPost getPost(String id){
         WxPost post = wxPostMapper.selectByPrimaryKey(id);
         if(post != null){

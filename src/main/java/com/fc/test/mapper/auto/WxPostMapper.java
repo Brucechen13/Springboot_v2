@@ -23,4 +23,6 @@ public interface WxPostMapper {
     List<WxPost> selectOwnList(String id);
 
     List<WxPost> selectCommentList(String id);
+
+    List<WxPost> selectCollectList(String id);
 }
