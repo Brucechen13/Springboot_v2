@@ -1,9 +1,11 @@
 package com.fc.wx.service;
 
 import com.fc.test.common.base.BaseService;
+import com.fc.test.mapper.auto.WxCollectMapper;
 import com.fc.test.mapper.auto.WxCommentMapper;
 import com.fc.test.mapper.auto.WxPostMapper;
 import com.fc.test.mapper.auto.WxUserMapper;
+import com.fc.test.model.auto.WxCollect;
 import com.fc.test.model.auto.WxComment;
 import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
@@ -32,6 +34,9 @@ public class WxServiceService {
     @Autowired
     private WxCommentMapper wxCommentMapper;
 
+    @Autowired
+    private WxCollectMapper wxCollectMapper;
+
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public WxUser loginByWeixin(String code){
@@ -55,6 +60,12 @@ public class WxServiceService {
         //添加雪花主键id
         record.setId(SnowflakeIdWorker.getUUID());
         return wxCommentMapper.insert(record);
+    }
+
+    public int insertCollect(WxCollect record) {
+        //添加雪花主键id
+        record.setId(SnowflakeIdWorker.getUUID());
+        return wxCollectMapper.insert(record);
     }
 
     private void deal(WxPost post){

@@ -1,5 +1,6 @@
 package com.fc.test.controller;
 
+import com.fc.test.model.auto.WxCollect;
 import com.fc.test.model.auto.WxComment;
 import com.fc.test.model.auto.WxPost;
 import com.fc.test.model.auto.WxUser;
@@ -115,8 +116,16 @@ public class WXController extends BaseController {
         post.setTitle(bean.getTitleIntro());
         post.setContent(bean.getTaskDiscribe());
         post.setClasses(bean.getClasses());
-        post.setBegintime(bean.getStartime());
-        post.setEndtime(bean.getEndtime());
+        if(bean.getStartime().equals("")){
+            post.setBegintime(sdf.format(new Date()));
+        }else {
+            post.setBegintime(bean.getStartime());
+        }
+        if(bean.getEndtime().equals("")){
+            post.setEndtime(sdf.format(new Date()));
+        }else {
+            post.setEndtime(bean.getEndtime());
+        }
 
         if(bean.getSelectedTag() == null || bean.getSelectedTag().size() == 0){
             post.setFlagstr("");
@@ -150,6 +159,20 @@ public class WXController extends BaseController {
         wxServiceService.insertComment(comment);
 
         return ResponseBean.MakeSuccessRes("添加评论成功", content);
+    }
+
+    @ApiOperation(value="添加动态收藏",notes="添加动态收藏")
+    @ResponseBody
+    @RequestMapping(value = "/collect", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    public ResponseBean addCollect(HttpServletRequest request, @SessionAttribute("userid") String userId, String postid) {
+        System.out.println("comment, sessId: " + userId);
+        WxCollect collect = new WxCollect();
+        collect.setPostid(postid);
+        collect.setUserid(userId);
+        collect.setCollecttime(sdf.format(new Date()));
+        wxServiceService.insertCollect(collect);
+
+        return ResponseBean.MakeSuccessRes("收藏动态成功", null);
     }
 
     @ApiOperation(value="用户登录",notes="用户登录")
