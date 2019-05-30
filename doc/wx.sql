@@ -41,7 +41,7 @@ CREATE TABLE `wx_posts` (
 ALTER TABLE wx_posts ADD CONSTRAINT fk_wx_posts_id FOREIGN KEY (userid) REFERENCES wx_users(id);
 
 INSERT INTO `wx_posts` VALUES ('1241415', '577272523196989440', 'this is title', 'this is content', '进行中', '运动', '发布动态', '2019-06-01', '2019-06-01');
-INSERT INTO `wx_posts` VALUES ('1241416', '577272523196989440', '这是一个很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的标题', '这是一个很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的内容', '进行中', '运动&游戏&美食', '发布任务', '2019-06-01', '2019-06-01');
+INSERT INTO `wx_posts` VALUES ('1241416', '577272523196989440', '这是一个很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的标题', '这是一个很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的内容', '进行中', '运动#游戏#美食', '发布任务', '2019-06-01', '2019-06-01');
 
 INSERT INTO `wx_posts` VALUES ('1241417', '577272523196989440', '普通标题，大概就这么长', '内容可能很短', '进行中', '运动', '发布动态', '2019-06-01', '2019-06-01');
 INSERT INTO `wx_posts` VALUES ('1241418', '577272523196989440', '测试', '内容', '进行中', '运动', '发布动态', '2019-06-01', '2019-06-01');
@@ -71,3 +71,9 @@ ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id1 FOREIGN KEY (userid) R
 ALTER TABLE wx_comments ADD CONSTRAINT fk_wx_comments_id2 FOREIGN KEY (postid) REFERENCES wx_posts(id);
 
 INSERT INTO `wx_comments` VALUES ('1245', '577272523196989440', '1241416', '这是一个很长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长的评论', '', '2019-06-01');
+
+INSERT INTO `wx_comments` VALUES ('1246', '577272523196989440', '1241416', '这是一个很长的评论', '', '2019-06-01');
+
+INSERT INTO `wx_comments` VALUES ('1247', '577272523196989440', '1241416', '这是一个很长长长长长长长长长长长长的评论', '', '2019-06-01');
+
+INSERT INTO `wx_comments` VALUES ('1248', '577272523196989440', '1241416', 'test', '', '2019-06-01');

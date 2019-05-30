@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,6 +37,36 @@ public class WXController extends BaseController {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+    @ApiOperation(value="写入Cookie",notes="写入Cookie")
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test(HttpServletResponse response) {
+        Cookie cookie = new Cookie("sessionId","123");
+        response.addCookie(cookie);
+        return ResponseBean.MakeSuccessRes("写入cookie", null);
+    }
+
+    @ApiOperation(value="测试Cookie",notes="测试Cookie")
+    @RequestMapping(value = "/test1", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test1(@CookieValue("sessionId") String userId) {
+        return ResponseBean.MakeSuccessRes("登录成功", userId);
+    }
+
+    @ApiOperation(value="写入session",notes="写入session")
+    @RequestMapping(value = "/test2", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test2(HttpSession session) {
+        session.setAttribute("sessionId2","123");
+        return ResponseBean.MakeSuccessRes("写入session", null);
+    }
+
+    @ApiOperation(value="测试session",notes="测试session")
+    @RequestMapping(value = "/test3", method = RequestMethod.GET)
+    @ResponseBody
+    public Object test3(@SessionAttribute("sessionId2") String userId) {
+        return ResponseBean.MakeSuccessRes("登录成功", userId);
+    }
 
     @ApiOperation(value="查看所有动态",notes="查看所有动态")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
