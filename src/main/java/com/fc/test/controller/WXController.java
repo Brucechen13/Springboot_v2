@@ -167,7 +167,7 @@ public class WXController extends BaseController {
     public Object isCollect(@SessionAttribute("userid") String userid, String postid){
         System.out.println("isCollect, sessId: " + userid + " " + postid);
         boolean page = wxServiceService.isCollect(userid, postid);
-        return  ResponseBean.MakeSuccessRes("Post Detail", page);
+        return  ResponseBean.MakeSuccessRes("iscollect", page);
     }
 
     @ApiOperation(value="添加动态收藏",notes="添加动态收藏")
