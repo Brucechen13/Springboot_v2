@@ -23,9 +23,17 @@
     from wx_posts p, wx_users u
     where p.id = #{id,jdbcType=VARCHAR} and u.id = p.userid
   </select>
-    <select id="selectList" resultMap="BaseResultMap">
+  <select id="selectList" resultMap="BaseResultMap">
     select *
     from wx_posts p, wx_users u where u.id = p.userid
+  </select>
+  <select id="selectOwnList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from wx_posts p, wx_users u where u.id = #{id,jdbcType=VARCHAR} and u.id = p.userid
+  </select>
+  <select id="selectCommentList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select *
+    from wx_posts p, wx_users u, wx_comments c where c.userid = #{id,jdbcType=VARCHAR} and u.id = p.userid and c.postid = p.id
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from wx_posts

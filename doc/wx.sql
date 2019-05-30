@@ -82,4 +82,16 @@ INSERT INTO `wx_comments` VALUES ('1247', '577272523196989440', '1241416', '插�
 
 INSERT INTO `wx_comments` VALUES ('1248', '577272523196989440', '1241416', '你说的很对', '', '2019-06-01');
 
-INSERT INTO `wx_comments` VALUES ('1248', '577272523196989440', '1241417', '点赞', '', '2019-06-01');
+INSERT INTO `wx_comments` VALUES ('1249', '577272523196989440', '1241417', '点赞', '', '2019-06-01');
+
+-- ----------------------------
+-- Table structure for 收藏
+-- ----------------------------
+DROP TABLE IF EXISTS `wx_collects`;
+CREATE TABLE `wx_collects` (
+  `id` varchar(255) NOT NULL COMMENT '主键',
+  `userid` varchar(255) NOT NULL COMMENT '用户',
+  `postid` varchar(255) DEFAULT NULL COMMENT '动态',
+  `collecttime` varchar(255) DEFAULT NULL COMMENT '时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='动态收藏表';

@@ -57,19 +57,44 @@ public class WxServiceService {
         return wxCommentMapper.insert(record);
     }
 
+    private void deal(WxPost post){
+        List<String> flags = new ArrayList<>();
+        for(String flag : post.getFlagstr().split(AppUtil.SEP)){
+            flags.add(flag);
+        }
+        post.setFlags(flags);
+        if(post.getEndtime().compareTo(sdf.format(new Date())) < 0){
+            post.setStatus(AppUtil.ENDED);
+        }
+        post.setComments(wxCommentMapper.selectByPostId(post.getId()));
+    }
+
+
     public PageInfo<WxPost> listPosts(Tablepar tablepar){
         PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
         List<WxPost> list = wxPostMapper.selectList();
         for(WxPost post : list){
-            List<String> flags = new ArrayList<>();
-            for(String flag : post.getFlagstr().split(AppUtil.SEP)){
-                flags.add(flag);
-            }
-            post.setFlags(flags);
-            if(post.getEndtime().compareTo(sdf.format(new Date())) < 0){
-                post.setStatus(AppUtil.ENDED);
-            }
-            post.setComments(wxCommentMapper.selectByPostId(post.getId()));
+            deal(post);
+        }
+        PageInfo<WxPost> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+    public PageInfo<WxPost> listOwnList(String userId, Tablepar tablepar){
+        PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
+        List<WxPost> list = wxPostMapper.selectOwnList(userId);
+        for(WxPost post : list){
+            deal(post);
+        }
+        PageInfo<WxPost> pageInfo = new PageInfo<>(list);
+        return pageInfo;
+    }
+
+    public PageInfo<WxPost> listCommentList(String userId, Tablepar tablepar){
+        PageHelper.startPage(tablepar.getPageNum(), tablepar.getPageSize());
+        List<WxPost> list = wxPostMapper.selectCommentList(userId);
+        for(WxPost post : list){
+            deal(post);
         }
         PageInfo<WxPost> pageInfo = new PageInfo<>(list);
         return pageInfo;

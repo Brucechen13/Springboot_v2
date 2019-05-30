@@ -62,8 +62,35 @@ public class WXController extends BaseController {
     @ApiOperation(value="查看所有动态",notes="查看所有动态")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public Object list(HttpServletRequest request, Tablepar tablepar){
+    public Object list(Tablepar tablepar){
         PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
+        TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
+        return  ResponseBean.MakeSuccessRes("Post List", result);
+    }
+
+    @ApiOperation(value="查看发布的动态",notes="查看发布的动态")
+    @RequestMapping(value = "/listowner", method = RequestMethod.GET)
+    @ResponseBody
+    public Object listOwner(@SessionAttribute("userid") String userId, Tablepar tablepar){
+        PageInfo<WxPost> page=wxServiceService.listOwnList(userId, tablepar) ;
+        TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
+        return  ResponseBean.MakeSuccessRes("Post List", result);
+    }
+
+    @ApiOperation(value="查看收藏的动态",notes="查看收藏的动态")
+    @RequestMapping(value = "/listcollect", method = RequestMethod.GET)
+    @ResponseBody
+    public Object listCollector(@SessionAttribute("userid") String userId, Tablepar tablepar){
+        PageInfo<WxPost> page=wxServiceService.listPosts(tablepar) ;
+        TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
+        return  ResponseBean.MakeSuccessRes("Post List", result);
+    }
+
+    @ApiOperation(value="查看评论的动态",notes="查看评论的动态")
+    @RequestMapping(value = "/listcomment", method = RequestMethod.GET)
+    @ResponseBody
+    public Object listComment(@SessionAttribute("userid") String userId, Tablepar tablepar){
+        PageInfo<WxPost> page=wxServiceService.listCommentList(userId, tablepar) ;
         TableSplitResult<WxPost> result=new TableSplitResult<>(page.getPageNum(), (long)page.getPages(), page.getList());
         return  ResponseBean.MakeSuccessRes("Post List", result);
     }

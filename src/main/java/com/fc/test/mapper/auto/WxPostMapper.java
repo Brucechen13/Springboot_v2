@@ -19,4 +19,8 @@ public interface WxPostMapper {
     int updateByPrimaryKey(WxPost record);
 
     List<WxPost> selectList();
+
+    List<WxPost> selectOwnList(String id);
+
+    List<WxPost> selectCommentList(String id);
 }

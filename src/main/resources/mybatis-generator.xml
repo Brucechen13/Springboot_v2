@@ -88,8 +88,10 @@
         <table tableName="wx_users" domainObjectName="WxUser" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
         <table tableName="wx_posts" domainObjectName="WxPost" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-        </table>-->
+        </table>
         <table tableName="wx_comments" domainObjectName="WxComment" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        </table>-->
+        <table tableName="wx_collects" domainObjectName="WxCollect" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
         </table>
         
     </context>
