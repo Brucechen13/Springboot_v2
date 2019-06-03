@@ -77,7 +77,11 @@ public class WxServiceService {
         for(String flag : post.getFlagstr().split(AppUtil.SEP)){
             flags.add(flag);
         }
-        post.setFlags(flags);
+	if(flags.size() == 0){	
+		post.setFlags(null);
+	}else{
+        	post.setFlags(flags);
+	}
         if(post.getEndtime().compareTo(sdf.format(new Date())) < 0){
             post.setStatus(AppUtil.ENDED);
         }

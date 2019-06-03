@@ -227,6 +227,6 @@ public class WXController extends BaseController {
             return ResponseBean.MakeFailRes(e.getLocalizedMessage());
         }
         session.setAttribute("userid", user.getId());
-        return ResponseBean.MakeSuccessRes("登录成功", msg);
+        return ResponseBean.MakeSuccessRes("登录成功", 1);
     }
 }
