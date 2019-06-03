@@ -75,6 +75,7 @@ public class WxServiceService {
     private void deal(WxPost post){
         List<String> flags = new ArrayList<>();
         for(String flag : post.getFlagstr().split(AppUtil.SEP)){
+	    if(flag.equals(""))continue;
             flags.add(flag);
         }
 	if(flags.size() == 0){	
